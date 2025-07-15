@@ -4,7 +4,6 @@ ignore:
     - CompositeAlarm
     - InsightRule
     - ManagedInsightRule
-    - MetricStream
 model_name: monitoring
 operations:
   DeleteAlarms:
@@ -21,6 +20,44 @@ operations:
     - Create
     - Update
     resource_name: MetricAlarm
+  StartMetricStreams:
+    operation_type:
+    - Update
+    resource_name: MetricStream
+  StopMetricStreams:
+    operation_type:
+    - Update
+    resource_name: MetricStream
+  DeleteMetricStream:
+    operation_type:
+    - Delete
+    resource_name: MetricStream
+  GetMetricStream:
+    operation_type:
+    - ReadOne
+    resource_name: MetricStream
+  ListMetricStreams:
+    operation_type:
+    - ReadMany
+    resource_name: MetricStream
+    output_wrapper_field_path: Entries
+  PutMetricStream:
+    operation_type:
+    - Create
+    - Update
+    resource_name: MetricStream
+  TagResource:
+    operation_type:
+    - Custom
+    resource_name: MetricStream
+  UntagResource:
+    operation_type:
+    - Custom
+    resource_name: MetricStream
+  ListTagsForResource:
+    operation_type:
+    - Custom
+    resource_name: MetricStream
 resources:
   MetricAlarm:
     fields:
@@ -37,3 +74,15 @@ resources:
         template_path: hooks/metricalarm/sdk_read_many_post_build_request.go.tpl
       sdk_delete_post_build_request:
         template_path: hooks/metricalarm/sdk_delete_post_build_request.go.tpl
+  MetricStream:
+    fields:
+      Name:
+        is_primary_key: true
+        is_required: true
+    hooks:
+      sdk_create_post_set_output:
+        template_path: hooks/metric_stream/sdk_create_post_set_output.go.tpl
+      sdk_update_pre_build_request:
+        template_path: hooks/metric_stream/sdk_update_pre_build_request.go.tpl
+      sdk_read_one_post_set_output:
+        template_path: hooks/metric_stream/sdk_read_one_post_set_output.go.tpl
